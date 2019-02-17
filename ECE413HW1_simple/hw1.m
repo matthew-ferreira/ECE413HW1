@@ -36,32 +36,38 @@ constants.durationChord=3;          % Duration of chords
 
 disp('Playing the Just Tempered Major Scale');
 soundsc(soundMajorScaleJust,constants.fs);
+pause(5)
 disp('Playing the Equal Tempered Major Scale');
 soundsc(soundMajorScaleEqual,constants.fs);
+pause(5)
 disp('Playing the Just Tempered Minor Scale');
 soundsc(soundMinorScaleJust,constants.fs);
+pause(5)
 disp('Playing the Equal Tempered Minor Scale');
 soundsc(soundMinorScaleEqual,constants.fs);
+pause(5)
 fprintf('\n');
 
 % EXTRA CREDIT - Melodic and Harmonic scales
 [soundHarmScaleJust]=create_scale('Harmonic','Just','A',constants);
 [soundHarmScaleEqual]=create_scale('Harmonic','Equal','A',constants);
-[soundMelScaleJust]=create_scale('Melodic','Just','A',constants);
-[soundMelScaleEqual]=create_scale('Melodic','Equal','A',constants);
+%[soundMelScaleJust]=create_scale('Melodic','Just','A',constants);
+%[soundMelScaleEqual]=create_scale('Melodic','Equal','A',constants);
 
 disp('Playing the Just Tempered Harmonic Scale');
 soundsc(soundHarmScaleJust,constants.fs);
+pause(5)
 disp('Playing the Equal Tempered Harmonic Scale');
 soundsc(soundHarmScaleEqual,constants.fs);
-disp('Playing the Just Tempered Melodic Scale');
-soundsc(soundMelScaleJust,constants.fs);
-disp('Playing the Equal Tempered Melodic Scale');
-soundsc(soundMelScaleEqual,constants.fs);
+pause(5)
+%disp('Playing the Just Tempered Melodic Scale');
+%soundsc(soundMelScaleJust,constants.fs);
+%disp('Playing the Equal Tempered Melodic Scale');
+%soundsc(soundMelScaleEqual,constants.fs);
 fprintf('\n');
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Question 3 - chords
+%% Question 3 - chords
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 fund = 'A'; % need this to determine wavelength for plots
 
@@ -73,12 +79,16 @@ fund = 'A'; % need this to determine wavelength for plots
 
 disp('Playing the Just Tempered Major Chord');
 soundsc(soundMajorChordJust,constants.fs);
+pause(4)
 disp('Playing the Equal Tempered Major Chord');
 soundsc(soundMajorChordEqual,constants.fs);
+pause(4)
 disp('Playing the Just Tempered Minor Chord');
 soundsc(soundMinorChordJust,constants.fs);
+pause(4)
 disp('Playing the Equal Tempered Minor Chord');
 soundsc(soundMinorChordEqual,constants.fs);
+pause(4)
 fprintf('\n');
 
 % assorted other chords
@@ -96,29 +106,72 @@ fprintf('\n');
 
 disp('Playing the Just Tempered Power Chord');
 soundsc(soundPowerChordJust,constants.fs);
+pause(4)
 disp('Playing the Equal Tempered Power Chord');
 soundsc(soundPowerChordEqual,constants.fs);
+pause(4)
 disp('Playing the Just Tempered Sus2 Chord');
 soundsc(soundSus2ChordJust,constants.fs);
+pause(4)
 disp('Playing the Equal Tempered Sus2 Chord');
 soundsc(soundSus2ChordEqual,constants.fs);
+pause(4)
 disp('Playing the Just Tempered Sus4 Chord');
 soundsc(soundSus2ChordJust,constants.fs);
+pause(4)
 disp('Playing the Equal Tempered Sus4 Chord');
 soundsc(soundSus2ChordEqual,constants.fs);
+pause(4)
 disp('Playing the Just Tempered Dom7 Chord');
 soundsc(soundDom7ChordJust,constants.fs);
+pause(4)
 disp('Playing the Equal Tempered Dom7 Chord');
 soundsc(soundDom7ChordEqual,constants.fs);
+pause(4)
 disp('Playing the Just Tempered Min7 Chord');
 soundsc(soundMin7ChordJust,constants.fs);
+pause(4)
 disp('Playing the Equal Tempered Min7 Chord');
 soundsc(soundMin7ChordEqual,constants.fs);
+pause(4)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Question 4 - plots
+%% Question 4 - plots
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % determine fundamental frequency
+
+
+figure()
+subplot(2,2,1)
+plot(soundMajorChordJust(1:1000))
+title('Major Chord Just Temperment')
+subplot(2,2,2)
+plot(soundMajorChordEqual(1:1000))
+title('Major Chord Equal Temperment')
+
+subplot(2,2,3)
+plot(soundMajorChordJust(1:20000))
+title('Major Chord Just Temperment')
+subplot(2,2,4)
+plot(soundMajorChordEqual(1:20000))
+title('Major Chord Equal Temperment')
+
+
+
+figure()
+subplot(2,2,1)
+plot(soundMinorChordJust(1:1000))
+title('Minor Chord Just Temperment')
+subplot(2,2,2)
+plot(soundMinorChordEqual(1:1000))
+title('Minor Chord Equal Temperment')
+
+subplot(2,2,3)
+plot(soundMinorChordJust(1:10000))
+title('Minor Chord Just Temperment')
+subplot(2,2,4)
+plot(soundMinorChordEqual(1:10000))
+title('Minor Chord Equal Temperment')
 
 
 % Major chords
