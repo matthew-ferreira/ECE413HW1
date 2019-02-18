@@ -35,7 +35,7 @@ notes{3}.velocity=1;
 
 instrument.temperament='Equal';
 instrument.sound='Additive';
-instrument.totalTime=find_length_of_notes(notes);
+%instrument.totalTime=find_length_of_notes(notes);
 
 % for just-tempered chords, use the root note and mode to generate
 % frequencies rather than a sequence of note names.
@@ -44,7 +44,7 @@ instrument.mode = 'Major';
 synthTypes={'Additive','Subtractive','FM','Waveshaper'};
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Questions 1--4 - samples
+%% Questions 1--4 - samples
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 for cntSynth=1:length(synthTypes)
     instrument.sound=synthTypes{cntSynth};
@@ -54,13 +54,14 @@ for cntSynth=1:length(synthTypes)
     
     fprintf(STDOUT,'Playing the Sample Note');
     soundsc(soundSample,constants.fs);
+    pause(4)
     fprintf('\n');
     
 end % for cntSynth;
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Question 5  - chords
+%% Question 5  - chords
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 for cntSynth=1:length(synthTypes)
     % major chords
