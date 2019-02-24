@@ -16,6 +16,9 @@ switch notes.note
         rootFreq = 349.2282;
     case{'G4'}
         rootFreq = 391.9954;
+    otherwise
+        rootFreq = notes.note
+        
 end
 
 switch instrument.sound
@@ -36,14 +39,16 @@ switch instrument.sound
     case{'Subtractive'}
         t = 0 : 1/constants.fs : duration-1/constants.fs;
         signal = square(2*pi*rootFreq*t);
+        if(mod(length(signal),100) ~= 0)
+            signal = [signal zeros(1, 100 - mod(length(signal),100))];
+        end
         signal = reshape(signal,[],100);
         b = 1;
-        a = [1.2^2 0 1];
-        blocks = ceil(notes.duration/100);
-        theta = linspace(pi/2-0.2,0,blocks);
+        blocks = size(signal,1);
+        theta = linspace(pi/2, 0, blocks);
         sound = zeros(blocks,100);
         for i = 1:blocks
-            a(2) = -2 * 1.2 * cos(theta(i));
+            a = [0.9^2, -2 * 0.9 * cos(theta(i)), 1];
             s = filter(b, a, signal(i,:));
             sound(i,:) = s;
         end
@@ -54,6 +59,30 @@ switch instrument.sound
         fm = rootFreq * 7/5;
         envelope = exp(-6.93 * t / duration);
         soundSample = envelope.*sin((2*pi*t*rootFreq) + (2*pi*envelope.*cos(2*pi*fm*t)));
+    case{'Waveshaper'}
+        t = 0: 1/constants.fs : duration-1/constants.fs;
+        e1 = (0 : 1/constants.fs : 0.085) * (1/0.085);
+        e3 = flip(0 : 1/constants.fs : 0.64) * (1/0.64);
+        e2 = ones(1, length(t) - (length(e1) + length(e3)));
+        env = 255 * [e1 e2 e3];
+        
+        s = sin(2 * pi * rootFreq * t);
+        s = env(1:length(s)).*s;
+        s = s + 256;
+        
+        for i = 1:length(s)
+           if(s(i) < 200)
+               s(i) = s(i) *(0.5/200) - 1;
+           elseif((s(i) >= 200) && (s(i) < 312))
+               s(i) = (s(i)-200)*(1/112) - 0.5;
+           else
+               s(i) = 0.5 + (s(i)-312)*(0.5/200);
+           end
+        end
+        
+        soundSample = s;
+        
+        
 end
 end
 
