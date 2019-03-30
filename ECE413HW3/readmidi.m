@@ -45,9 +45,11 @@ function midi = readmidi(filename)
         end
     end
     
+    midi.raw = trackRaw;
     aTime = 0;
     eventCount = 0;  
     for i = 1:trackCount
+        prev_event_length = 0; %number of data bytes
         track = trackRaw{i};
         ctr = 9;
         prev_event = '';
@@ -81,6 +83,11 @@ function midi = readmidi(filename)
                    ctr = ctr + 5;
                    eventCount = eventCount + 1;
                    events(eventCount) = event; %store event
+               elseif(track(ctr+1) == 84 && track(ctr+2) == 5)
+                   disp('Most meta events not currently supported; skipping')
+                   disp(track(ctr+1))
+                   ctr = ctr + 8;
+                   prev_event = '';
                else
                    disp('Most meta events not currently supported; skipping')
                    disp(track(ctr+1))
@@ -99,10 +106,17 @@ function midi = readmidi(filename)
                        ctr = ctr + 1;
                        if(strcmp(event.type,'noteon') || strcmp(event.type,'noteoff'))
                            event.data2 = track(ctr+1);
+                           if(event.data2 == 0 && strcmp(event.type,'noteon'))
+                              event.type = 'noteoff'; 
+                           end    
                            ctr = ctr + 1;
                        else
                            event.data2 = 0;
                        end
+                   elseif(prev_event_length)
+                       ctr = ctr + prev_event_length;
+                   else
+                       
                    end  
                    
                 else %new event
@@ -127,21 +141,27 @@ function midi = readmidi(filename)
                         prev_event = '';
                         if((track(ctr) >= 160) && (track(ctr) <= 191))
                             ctr = ctr + 3;
+                            prev_event_length = 2;
                         elseif((track(ctr) >= 192) && (track(ctr) <= 223))
                             ctr = ctr + 2;
+                            prev_event_length = 1;
                         elseif((track(ctr) >= 224) && (track(ctr) <= 239))
                             ctr = ctr + 3;
+                            prev_event_length = 2;
                         elseif(track(ctr) == 240)
                             while(track(ctr) ~= 247)
                                 ctr = ctr + 1;
                             end
                             ctr = ctr + 1;
+                            prev_event_length = 0;
                         elseif(track(ctr) == 241 || (track(ctr) >= 244) && (track(ctr) <= 255))
                             ctr = ctr + 1;
                         elseif(track(ctr) == 242)
                             ctr = ctr + 3;
+                            prev_event_length = 2;
                         elseif(track(ctr) == 243)
                             ctr = ctr + 2;
+                            prev_event_length = 1;
                         end
                     end
                 
@@ -154,6 +174,10 @@ function midi = readmidi(filename)
         end
     end
     
+    %sort events into chronological order
+    [~, ind] = sort([events.time]);
+    events_sorted = events(ind);
+    
     noteCount = 0;
     temperament = 'equal';
     key = 'C';
@@ -161,24 +185,24 @@ function midi = readmidi(filename)
     keyOptions = {'Cb','Gb','Db','Ab','Eb','Bb','F','C','G','D','A','E','B','F#','C#'};
     %convert events to array of notes
     for i = 1:eventCount
-       if(strcmp(events(i).type,'noteon'))
+       if(strcmp(events_sorted(i).type,'noteon'))
           j = i+1;
-          while((j<=eventCount) && (~strcmp(events(j).type,'noteoff')) && (events(j).data1 ~= events(i).data1))
+          while((j<=eventCount) && (~strcmp(events_sorted(j).type,'noteoff')) && (events_sorted(j).data1 ~= events_sorted(i).data1))
              j = j + 1;
           end
           if(j > eventCount)
              disp('unmatched note on... ignoring')
           else
-             startTime = events(i).time / division * tempo / 1000000;
-             endTime = events(j).time / division * tempo / 1000000;
-             note = objNote(events(i).data1, temperament, key, startTime, endTime, 1);
+             startTime = events_sorted(i).time / division * tempo / 1000000;
+             endTime = events_sorted(j).time / division * tempo / 1000000;
+             note = objNote(events_sorted(i).data1, temperament, key, startTime, endTime, 0.05);
              noteCount = noteCount + 1;
              notes(noteCount) = note;
           end 
-       elseif(strcmp(events(i).type,'key'))
-           key = keyOptions{events(i).data1 + 8};
-       elseif(strcmp(events(i).type,'tempo'))
-           tempo = events(i).data1;
+       elseif(strcmp(events_sorted(i).type,'key'))
+           key = keyOptions{events_sorted(i).data1 + 8};
+       elseif(strcmp(events_sorted(i).type,'tempo'))
+           tempo = events_sorted(i).data1;
        end 
     end  
     
