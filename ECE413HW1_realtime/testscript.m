@@ -5,6 +5,8 @@ clear classes                                                                   
 format compact                                                                          % reduce white space
 dbstop if error                                                                         % add dynamic break point
 
+addpath('../ECE413HW3')
+
 % PROGRAM CONSTANTS
 constants                              = confConstants;
 constants.BufferSize                   = 882;                                                    % Samples
@@ -23,31 +25,32 @@ oscParams.oscAmpEnv.ReleaseTime        = .05;  % Time to release from sustain to
 
 
 % Play the scales
+mid = readmidi('ROW.mid')
+playAudio(mid,oscParams,constants);
 
-
-majorScaleJust=objScale('major',60,'just','C',120);
-tmp=playAudio(majorScaleJust,oscParams,constants);
-
-majorScaleEqual=objScale('major',60,'equal','C',120);
-playAudio(majorScaleEqual,oscParams,constants);
-
-minorScaleJust=objScale('minor',60,'just','C',120);
-playAudio(minorScaleJust,oscParams,constants);
-
-minorScaleEqual=objScale('minor',60,'equal','C',120);
-playAudio(minorScaleEqual,oscParams,constants);
+% majorScaleJust=objScale('major',60,'just','C',120);
+% tmp=playAudio(majorScaleJust,oscParams,constants);
+% 
+% majorScaleEqual=objScale('major',60,'equal','C',120);
+% playAudio(majorScaleEqual,oscParams,constants);
+% 
+% minorScaleJust=objScale('minor',60,'just','C',120);
+% playAudio(minorScaleJust,oscParams,constants);
+% 
+% minorScaleEqual=objScale('minor',60,'equal','C',120);
+% playAudio(minorScaleEqual,oscParams,constants);
 
 
 % Play the chords
-majorChordJust=objChord('major',60,'just','C',120);
-playAudio(majorChordJust,oscParams,constants);
-%
-majorChordEqual=objChord('major',60,'equal','C',120);
-playAudio(majorChordEqual,oscParams,constants);
-%
-minorChordJust=objChord('minor',60,'just','C',120);
-playAudio(majorChordJust,oscParams,constants);
-
-minorChordEqual=objChord('minor',60,'equal','C',120);
-playAudio(majorChordEqual,oscParams,constants);
+% majorChordJust=objChord('major',60,'just','C',120);
+% playAudio(majorChordJust,oscParams,constants);
+% 
+% majorChordEqual=objChord('major',60,'equal','C',120);
+% playAudio(majorChordEqual,oscParams,constants);
+% 
+% minorChordJust=objChord('minor',60,'just','C',120);
+% playAudio(majorChordJust,oscParams,constants);
+% 
+% minorChordEqual=objChord('minor',60,'equal','C',120);
+% playAudio(majorChordEqual,oscParams,constants);
 
